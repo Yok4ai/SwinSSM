@@ -1,0 +1,12 @@
+/checkpoints
+*.egg-info/
+**/__pycache__/
+*.pyc
+/dataset
+/wandb
+*.pth
+*.ckpt
+.env
+.vscode
+validation_results
+visualizations
