@@ -70,18 +70,7 @@ def prepare_brats_data(input_dir, output_dir):
     return output_dir
 
 
-def setup_kaggle_notebook(dataset="brats2023"):
-    """Prepare data from Kaggle input directories."""
-    if dataset == "brats2021":
-        input_dir = '/kaggle/input/brats21'
-    elif dataset == "combined":
-        input_dir = ['/kaggle/input/brats21', '/kaggle/input/brats2023-part-1', '/kaggle/input/brats2023-part-2zip']
-    else:
-        input_dir = ['/kaggle/input/brats2023-part-1', '/kaggle/input/brats2023-part-2zip']
-    return prepare_brats_data(input_dir, '/kaggle/working')
-
-
-def setup_local_data(custom_input_dir):
+def setup_data(custom_input_dir):
     """Prepare data from a user-supplied path. Skips preparation if dataset.json already exists."""
     input_dir = custom_input_dir
     output_dir = 'dataset'
@@ -100,13 +89,5 @@ def setup_local_data(custom_input_dir):
 
 
 if __name__ == "__main__":
-    if os.path.exists('/kaggle/input'):
-        output_dir = setup_kaggle_notebook()
-    else:
-        print("Provide a data path via --data_dir when running locally.")
-        output_dir = None
+    print("Provide a data path via --data_dir when running run.py.")
 
-    if output_dir:
-        print(f"Setup complete. Dataset at: {output_dir}")
-    else:
-        print("Setup failed.")

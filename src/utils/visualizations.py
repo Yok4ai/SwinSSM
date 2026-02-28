@@ -13,7 +13,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 from models.swinunetr import SwinUNETR
 from data.augmentations import get_transforms
 from data.dataloader import get_dataloaders
-from kaggle_setup import prepare_brats_data
+from dataset_setup import prepare_brats_data
 from captum.attr import Saliency
 from captum.attr import IntegratedGradients
 

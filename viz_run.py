@@ -46,7 +46,7 @@ from monai.visualize import GradCAM
 from captum.attr import IntegratedGradients
 import imageio
 
-from kaggle_setup import prepare_local_brats_data
+from dataset_setup import prepare_brats_data
 from src.utils.validation import StandaloneValidationPipeline as BraTSValidator
 from src.utils.visualizations import resize_cam, show_cam_overlay, normalize_attr
 
@@ -106,7 +106,7 @@ IG_STEPS       = 20
 
 # ── 1. Dataset ────────────────────────────────────────────────────────────────
 print("Preparing dataset.json...")
-prepare_local_brats_data(DATA, "dataset")
+prepare_brats_data(DATA, "dataset")
 
 # ── 2. Load validators ────────────────────────────────────────────────────────
 validators = {}

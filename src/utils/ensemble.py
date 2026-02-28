@@ -57,8 +57,7 @@ except ImportError as e:
     print(f"Mamba architectures not available: {e}")
     print("Install mamba-ssm: pip install mamba-ssm")
 
-# Import kaggle_setup for automatic dataset.json creation
-from kaggle_setup import prepare_brats_data
+from dataset_setup import prepare_brats_data
 
 class BraTSVolumeThresholding:
     """

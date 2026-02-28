@@ -1,7 +1,7 @@
 # run.py
 import sys
 import os
-from kaggle_setup import setup_kaggle_notebook, setup_local_data
+from dataset_setup import setup_data
 from main import main
 import argparse
 import torch
@@ -31,7 +31,7 @@ def parse_cli_args():
                                 'adaptive_complexity_cascade', 'adaptive_dynamic_hybrid'], 
                         help='Loss function type')
     parser.add_argument('--learning_rate', type=float, default=1e-4, help='Learning rate for optimizer')
-    parser.add_argument('--data_dir', nargs='+', default=None, help='Path(s) to raw BraTS data. Accepts one or more directories. If omitted, falls back to Kaggle input paths.')
+    parser.add_argument('--data_dir', nargs='+', default=None, help='Path(s) to raw BraTS data. If omitted, defaults to dataset/BRATS2023-training or dataset/BRATS2021-training depending on --dataset.')
 
 ### Basic configuration parameters
 
@@ -590,21 +590,35 @@ python run.py \
 
 
 #### Setup the environment and prepare data ####
+_local_defaults = {
+    "brats2023": "dataset/BRATS2023-training",
+    "brats2021": "dataset/BRATS2021-training",
+}
+
 if cli_args.data_dir is not None:
     custom_input_dir = cli_args.data_dir[0] if len(cli_args.data_dir) == 1 else cli_args.data_dir
     if len(cli_args.data_dir) == 1:
         print(f"Processing dataset from: {custom_input_dir}")
     else:
         print(f"Processing multiple dataset directories from: {cli_args.data_dir}")
-    output_dir = setup_local_data(custom_input_dir)
+    output_dir = setup_data(custom_input_dir)
     if output_dir:
         print(f"Processed dataset saved to: {output_dir}")
     else:
         print(f"Failed to process dataset from: {custom_input_dir}")
         sys.exit(1)
+elif cli_args.dataset in _local_defaults and os.path.exists(_local_defaults[cli_args.dataset]):
+    default_local = _local_defaults[cli_args.dataset]
+    print(f"Using default local dataset path: {default_local}")
+    output_dir = setup_data(default_local)
+    if output_dir:
+        print(f"Processed dataset saved to: {output_dir}")
+    else:
+        print(f"Failed to process dataset from: {default_local}")
+        sys.exit(1)
 else:
-    output_dir = setup_kaggle_notebook(cli_args.dataset)
-    print(f"Dataset prepared in: {output_dir}")
+    print(f"No dataset found. Pass --data_dir or place data at {_local_defaults.get(cli_args.dataset, 'dataset/<dataset-dir>')}.")
+    sys.exit(1)
 
 
 # Experimental Configuration
